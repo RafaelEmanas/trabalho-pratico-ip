@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"time"
 )
 
 func imprimeMatriz(mat [][]int) {
@@ -285,22 +286,84 @@ func calculaDeterminanteOtimizado(mat [][]int) int{
 
 func main() {
 
-	var numLinhas, numColunas int
+	// var numLinhas, numColunas int
+	// var matriz [][]int
+	// var determinanteBaseline, determinanteOtimizado int
+	// var inicio time.Time
+	// var duracaoBaseline, duracaoOtimizado int64
+
+	// numColunas = 9
+	// numLinhas = 9
+
+	// matriz = criaMatriz(numLinhas,numColunas)
+	// matriz = iniciaMatrizAleatoria(matriz)
+
+	// inicio = time.Now()
+	// determinanteBaseline = calculaDeterminanteBaseline(matriz)
+	// duracaoBaseline = time.Since(inicio).Nanoseconds()
+
+	// inicio = time.Now()
+	// determinanteOtimizado = calculaDeterminanteOtimizado(matriz)
+	// duracaoOtimizado = time.Since(inicio).Nanoseconds()
+
+	// imprimeMatriz(matriz)
+
+	// fmt.Println("Determinante Baseline:", determinanteBaseline)
+	// fmt.Println("Tempo Determinante Baseline:", duracaoBaseline)
+	// fmt.Println("Determinante Otimizado:",determinanteOtimizado)
+	// fmt.Println("Tempo Determinante Otimizado:",duracaoOtimizado)
+
 	var matriz [][]int
-	var determinanteBaseline, determinanteOtimizado int
+	var inicioBaseline, inicioOtimizado time.Time
+	var ordemMatriz int
+	var i,j int
+	var duracaoBaseline, acumTempoBaseline, duracaoOtimizado, acumTempoOtimizado int64
+	var mediasTemposBaseline, mediasTemposOtimizado [5]int64
+	
+	acumTempoBaseline = 0
+	acumTempoOtimizado = 0
 
-	numColunas = 7
-	numLinhas = 7
+	i=0
+	for ordemMatriz=3;ordemMatriz<=11;ordemMatriz+=2{
+		fmt.Println("trabalhando na ordem:",ordemMatriz)
+		for j=0;j<4;j++{
+			matriz = criaMatriz(ordemMatriz,ordemMatriz)
+			matriz = iniciaMatrizAleatoria(matriz)
 
-	matriz = criaMatriz(numLinhas,numColunas)
-	matriz = iniciaMatrizAleatoria(matriz)
+			if(j!=0){
+				imprimeMatriz(matriz)
+			}
 
-	determinanteBaseline = calculaDeterminanteBaseline(matriz)
-	determinanteOtimizado = calculaDeterminanteOtimizado(matriz)
+			inicioBaseline = time.Now()
+			calculaDeterminanteBaseline(matriz)
+			duracaoBaseline = time.Since(inicioBaseline).Nanoseconds()
 
-	imprimeMatriz(matriz)
+			fmt.Println("tempo baseline iteração",j,":",duracaoBaseline)
+			if(j!=0){
+				acumTempoBaseline = acumTempoBaseline + duracaoBaseline
+			}
 
-	fmt.Println("Determinante Baseline:", determinanteBaseline)
-	fmt.Println("Determinante Otimizado:",determinanteOtimizado)
+			inicioOtimizado = time.Now()
+			calculaDeterminanteOtimizado(matriz)
+			duracaoOtimizado = time.Since(inicioOtimizado).Nanoseconds()
+			
+			fmt.Println("tempo otimizado iteração",j,":",duracaoOtimizado)
+
+			if(j!=0){
+				acumTempoOtimizado = acumTempoOtimizado + duracaoOtimizado
+			}
+		}
+
+		mediasTemposBaseline[i] = acumTempoBaseline/3
+		mediasTemposOtimizado[i] = acumTempoOtimizado/3
+
+		acumTempoBaseline = 0
+		acumTempoOtimizado = 0
+		i++
+		fmt.Println()
+	}
+
+	fmt.Println("Tempo Baseline:",mediasTemposBaseline)
+	fmt.Println("Tempo Otimizado:",mediasTemposOtimizado)
 
 }
