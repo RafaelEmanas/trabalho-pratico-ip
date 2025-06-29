@@ -33,12 +33,12 @@ func CalculaDeterminanteBaseline(mat [][]int) int {
 	det = 0
 	if ehQuadrada {
 		switch ordem {
-		case 1:
-			det = DetOrdem1(mat)
-		case 2:
-			det = DetOrdem2(mat)
-		default:
-			det = detOrdemN(mat)
+			case 1:
+				det = DetOrdem1(mat)
+			case 2:
+				det = DetOrdem2(mat)
+			default:
+				det = detOrdemN(mat)
 		}
 
 	} else {

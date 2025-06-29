@@ -1,25 +1,15 @@
 package main
 
 import (
-	"fmt"
 	"math/rand"
 )
 
-func ImprimeMatriz(mat [][]int) {
-	var contI int
-	var contJ int
-	for contI = 0; contI < len(mat); contI++ {
-		for contJ = 0; contJ < len(mat[0]); contJ++ {
-			fmt.Print(mat[contI][contJ], " ")
-		}
-		fmt.Println()
-	}
-}
-
-func CriaMatriz(numLinhas, numColunas int) [][]int {
+func CriaMatriz(numLinhas int, numColunas int) [][]int {
 	var matriz [][]int
+	var i int
+
 	matriz = make([][]int, numLinhas)
-	for i := range matriz {
+	for i=0;i<numLinhas;i++ {
 		matriz[i] = make([]int, numColunas)
 	}
 	return matriz

@@ -2,11 +2,15 @@ package main
 
 import "fmt"
 
+type FileiraMaisZeros struct{
+	indice int
+	quantidadeZeros int
+}
+
 func retornaFileiraMaisZeros(matriz [][]int) (string, int) {
 
 	var i, j int
-	var linhaMaisZeros []int
-	var colunaMaisZeros []int
+	var linhaMaisZeros, colunaMaisZeros FileiraMaisZeros
 	var acumuladorZerosLinha, acumuladorZerosColuna int
 	var numL, numC int
 	var tipoFileira string
@@ -15,8 +19,14 @@ func retornaFileiraMaisZeros(matriz [][]int) (string, int) {
 	numL = len(matriz)
 	numC = len(matriz[0])
 
-	linhaMaisZeros = make([]int, 2)
-	colunaMaisZeros = make([]int, 2)
+	linhaMaisZeros = FileiraMaisZeros{
+		indice: 0,
+		quantidadeZeros: 0,
+	}
+	colunaMaisZeros = FileiraMaisZeros{
+		indice: 0,
+		quantidadeZeros: 0,
+	}
 
 	acumuladorZerosLinha = 0
 	acumuladorZerosColuna = 0
@@ -31,25 +41,25 @@ func retornaFileiraMaisZeros(matriz [][]int) (string, int) {
 			}
 		}
 
-		if acumuladorZerosLinha > linhaMaisZeros[1] {
-			linhaMaisZeros[0] = i
-			linhaMaisZeros[1] = acumuladorZerosLinha
+		if acumuladorZerosLinha > linhaMaisZeros.quantidadeZeros {
+			linhaMaisZeros.indice = i
+			linhaMaisZeros.quantidadeZeros = acumuladorZerosLinha
 		}
-		if acumuladorZerosColuna > colunaMaisZeros[1] {
-			colunaMaisZeros[0] = i
-			colunaMaisZeros[1] = acumuladorZerosColuna
+		if acumuladorZerosColuna > colunaMaisZeros.quantidadeZeros {
+			colunaMaisZeros.indice = i
+			colunaMaisZeros.quantidadeZeros = acumuladorZerosColuna
 		}
 
 		acumuladorZerosLinha = 0
 		acumuladorZerosColuna = 0
 	}
 
-	if linhaMaisZeros[1] >= colunaMaisZeros[1] {
+	if linhaMaisZeros.quantidadeZeros >= colunaMaisZeros.quantidadeZeros {
 		tipoFileira = "linha"
-		indiceFileiraMaisZeros = linhaMaisZeros[0]
+		indiceFileiraMaisZeros = linhaMaisZeros.indice
 	} else {
 		tipoFileira = "coluna"
-		indiceFileiraMaisZeros = colunaMaisZeros[0]
+		indiceFileiraMaisZeros = colunaMaisZeros.indice
 	}
 
 	return tipoFileira, indiceFileiraMaisZeros
