@@ -31,16 +31,22 @@ func retornaFileiraMaisZeros(matriz [][]int) (string, int) {
 	acumuladorZerosLinha = 0
 	acumuladorZerosColuna = 0
 
+	//percorre a matrz 
 	for i = 0; i < numL; i++ {
 		for j = 0; j < numC; j++ {
+
+			//percorrer no sentido das linhas
 			if matriz[i][j] == 0 {
 				acumuladorZerosLinha++
 			}
+
+			//percorrer no sentido das colunas
 			if matriz[j][i] == 0 {
 				acumuladorZerosColuna++
 			}
 		}
 
+		//atualiza qual é a fileira com mais zeros
 		if acumuladorZerosLinha > linhaMaisZeros.quantidadeZeros {
 			linhaMaisZeros.indice = i
 			linhaMaisZeros.quantidadeZeros = acumuladorZerosLinha
@@ -54,6 +60,7 @@ func retornaFileiraMaisZeros(matriz [][]int) (string, int) {
 		acumuladorZerosColuna = 0
 	}
 
+	//verifica se a fileira é com mais zeros é uma linha ou uma coluna
 	if linhaMaisZeros.quantidadeZeros >= colunaMaisZeros.quantidadeZeros {
 		tipoFileira = "linha"
 		indiceFileiraMaisZeros = linhaMaisZeros.indice

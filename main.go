@@ -5,12 +5,13 @@ import (
 	"os"
 	"time"
 	"text/tabwriter"
+	"strings"
 )
 
 type Resultado struct{
 	Ordem int
-	TempoBaseline int64
-	TempoOtimizado int64
+	MediaTempoBaseline int64
+	MediaTempoOtimizado int64
 }
 
 func imprimeMatrizEmArquivo(file *os.File, mat [][]int) {
@@ -84,17 +85,16 @@ func imprimeResultadoTerminal(resultados []Resultado, writer *tabwriter.Writer) 
 	var elementoResultado Resultado
 	var i int
 
-
 	for i=0;i<len(resultados);i++{
 		elementoResultado = resultados[i]
 
-		diferencaTempos = elementoResultado.TempoBaseline - elementoResultado.TempoOtimizado
-		porcentagemDiferencaTempos = (float64(diferencaTempos) / float64(elementoResultado.TempoBaseline))*100
+		diferencaTempos = elementoResultado.MediaTempoBaseline - elementoResultado.MediaTempoOtimizado
+		porcentagemDiferencaTempos = (float64(diferencaTempos) / float64(elementoResultado.MediaTempoBaseline))*100
 
 		fmt.Fprintf(writer,"%d\t%d\t%d\t%d\t%.2f%%\n",
 			elementoResultado.Ordem,
-			elementoResultado.TempoBaseline,
-			elementoResultado.TempoOtimizado,
+			elementoResultado.MediaTempoBaseline,
+			elementoResultado.MediaTempoOtimizado,
 			diferencaTempos,
 			porcentagemDiferencaTempos)
 	}
@@ -118,7 +118,7 @@ func realizaExperimento(){
 	acumTempoOtimizado = 0
 
 	arquivoExperimento = inicializaArquivoExperimento("experimento.txt")
-	writer = inicializaTabWriter("Ordem\tTempo Baseline (ns)\tTempo Otimizado (ns)\tDiferença (ns)\t% Diferença")
+	writer = inicializaTabWriter("Ordem\tTempo Baseline (ns)\tTempo Otimizado (ns)\tDiferença (ns)\tDiferença (%)")
 
 	i = 0
 	for ordemMatriz = 3; ordemMatriz <= 11; ordemMatriz += 2 {
@@ -141,14 +141,16 @@ func realizaExperimento(){
 
 		resultados[i] = Resultado{
 			Ordem: ordemMatriz,
-			TempoBaseline: mediaTempoBaseline,
-			TempoOtimizado: mediaTempoOtimizado,
+			MediaTempoBaseline: mediaTempoBaseline,
+			MediaTempoOtimizado: mediaTempoOtimizado,
 		}
 
 		acumTempoBaseline = 0
 		acumTempoOtimizado = 0
 		i++
 	}
+
+	fmt.Fprintf(arquivoExperimento,"%s\n", strings.Repeat("-",100))
 
 	//[:] cria uma slice para que a função possa aceitar a array resultados
 	imprimeResultadoTerminal(resultados[:], writer)
